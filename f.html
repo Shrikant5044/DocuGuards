@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuGuard | Blockchain-Powered Document Verification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .app-container {
+            background-color: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2rem;
+            max-width: 36rem;
+            width: 100%;
+            text-align: center;
+        }
+        .button-primary {
+            background-color: #4f46e5;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .button-primary:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+        .button-secondary {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .button-secondary:hover {
+            background-color: #d1d5db;
+            transform: translateY(-2px);
+        }
+        .modal {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            top: 25%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Main Container -->
+    <div id="app-container" class="app-container">
+        <!-- Logo/Title -->
+        <div class="flex flex-col items-center mb-8">
+            <svg class="w-16 h-16 text-indigo-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.007 12.007 0 002.944 12c-.143.614.288 1.157.971 1.414.24.093.473.18.694.26a1.5 1.5 0 001.295-.008c.552-.162 1.1-.33 1.644-.492a1.5 1.5 0 011.246-.008c.552.162 1.1.33 1.644.492a1.5 1.5 0 001.246-.008c.552-.162 1.1.33 1.644.492a1.5 1.5 0 011.295-.008c.221.08.454.167.694.26.683.257 1.114.801.971 1.414a12.007 12.007 0 00-2.057 5.056c-.143.614.288 1.157.971 1.414.24.093.473.18.694.26a1.5 1.5 0 001.295-.008c.552-.162 1.1-.33 1.644-.492a1.5 1.5 0 011.246-.008c.552.162 1.1.33 1.644.492a1.5 1.5 0 001.295-.008c.221.08.454.167.694.26.683.257 1.114.801.971 1.414a12.007 12.007 0 00-2.057 5.056"></path>
+            </svg>
+            <h1 class="text-3xl font-bold text-gray-800">DocuGuard</h1>
+            <p class="text-gray-500 text-sm mt-1">Blockchain-Powered Document Verification</p>
+        </div>
+
+        <!-- Main View: Home Page -->
+        <div id="home-view" class="space-y-6">
+            <h2 class="text-2xl font-semibold text-gray-700">Choose Your Role</h2>
+            <div class="space-y-4 md:space-y-0 md:space-x-4 md:flex justify-center">
+                <button id="institute-button" class="button-primary">
+                    Institute Login
+                </button>
+                <button id="verify-button" class="button-secondary">
+                    Verify Document
+                </button>
+            </div>
+        </div>
+
+        <!-- Institute View -->
+        <div id="institute-view" class="space-y-6 hidden">
+            <h2 class="text-2xl font-semibold text-gray-700">Institute Upload Portal</h2>
+            <p class="text-gray-500">Upload a document to generate its unique, immutable blockchain ID.</p>
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <label for="institute-file" class="cursor-pointer text-indigo-600 font-medium hover:text-indigo-800 transition">Click to select a file</label>
+                <input type="file" id="institute-file" class="hidden" />
+            </div>
+            <button id="upload-btn" class="button-primary w-full mt-4">
+                Upload & Get ID
+            </button>
+            <button id="institute-back-btn" class="button-secondary w-full mt-2">
+                Back
+            </button>
+        </div>
+
+        <!-- Verification View -->
+        <div id="verify-view" class="space-y-6 hidden">
+            <h2 class="text-2xl font-semibold text-gray-700">Document Verification</h2>
+            <p class="text-gray-500">Upload a document to check its authenticity.</p>
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <label for="verify-file" class="cursor-pointer text-indigo-600 font-medium hover:text-indigo-800 transition">Click to select a file</label>
+                <input type="file" id="verify-file" class="hidden" />
+            </div>
+            <button id="verify-btn" class="button-primary bg-green-600 hover:bg-green-700 w-full mt-4">
+                Verify Document
+            </button>
+            <button id="verify-back-btn" class="button-secondary w-full mt-2">
+                Back
+            </button>
+        </div>
+
+        <!-- Message/Result Display -->
+        <div id="message-modal" class="hidden fixed inset-0 flex items-center justify-center modal z-50">
+            <div class="relative bg-white rounded-xl shadow-2xl p-6 w-96 max-w-sm modal-content">
+                <div class="mt-3 text-center">
+                    <h3 id="modal-title" class="text-xl leading-6 font-bold text-gray-900"></h3>
+                    <div class="mt-2 py-3">
+                        <p id="modal-message" class="text-sm text-gray-500"></p>
+                    </div>
+                    <div class="mt-4">
+                        <button id="modal-close-btn" class="button-primary w-full">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="hidden fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-40">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600"></div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for Logic -->
+    <script>
+        // --- UI Element References ---
+        const homeView = document.getElementById('home-view');
+        const instituteView = document.getElementById('institute-view');
+        const verifyView = document.getElementById('verify-view');
+
+        const instituteButton = document.getElementById('institute-button');
+        const verifyButton = document.getElementById('verify-button');
+        const instituteBackButton = document.getElementById('institute-back-btn');
+        const verifyBackButton = document.getElementById('verify-back-btn');
+        
+        const instituteFile = document.getElementById('institute-file');
+        const uploadBtn = document.getElementById('upload-btn');
+        const verifyFile = document.getElementById('verify-file');
+        const verifyBtn = document.getElementById('verify-btn');
+        
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const messageModal = document.getElementById('message-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // --- UI Navigation Logic ---
+        const showView = (view) => {
+            homeView.classList.add('hidden');
+            instituteView.classList.add('hidden');
+            verifyView.classList.add('hidden');
+            view.classList.remove('hidden');
+        };
+
+        instituteButton.addEventListener('click', () => {
+            showView(instituteView);
+        });
+
+        verifyButton.addEventListener('click', () => {
+            showView(verifyView);
+        });
+
+        instituteBackButton.addEventListener('click', () => {
+            showView(homeView);
+            instituteFile.value = ''; // Clear file input
+        });
+
+        verifyBackButton.addEventListener('click', () => {
+            showView(homeView);
+            verifyFile.value = ''; // Clear file input
+        });
+
+        modalCloseBtn.addEventListener('click', () => {
+            messageModal.classList.add('hidden');
+        });
+
+        // --- Core Application Logic ---
+
+        // Display a modal message
+        const showModal = (title, message) => {
+            modalTitle.textContent = title;
+            modalMessage.innerHTML = message;
+            messageModal.classList.remove('hidden');
+        };
+
+        /**
+         * A reliable SHA-256 hash generation function.
+         * It reads the file content as a binary array buffer.
+         */
+        const hashFile = async (file) => {
+            try {
+                const buffer = await file.arrayBuffer();
+                const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                return hashHex;
+            } catch (error) {
+                console.error("Hashing failed:", error);
+                throw new Error("Failed to hash the file. Please ensure your browser supports the Web Crypto API.");
+            }
+        };
+        
+        // Use a local "ledger" to simulate the blockchain
+        const ledger = JSON.parse(localStorage.getItem('documentLedger')) || {};
+
+        const saveToLedger = (hash, fileName) => {
+            ledger[hash] = {
+                fileName: fileName,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('documentLedger', JSON.stringify(ledger));
+        };
+
+        const checkLedger = (hash) => {
+            return ledger.hasOwnProperty(hash);
+        };
+
+        // Document Upload Logic for Institute
+        uploadBtn.addEventListener('click', async () => {
+            if (!instituteFile.files.length) {
+                showModal("Error", "Please select a file to upload.");
+                return;
+            }
+
+            loadingSpinner.classList.remove('hidden');
+            const file = instituteFile.files[0];
+            
+            try {
+                const documentHash = await hashFile(file);
+                
+                if (checkLedger(documentHash)) {
+                    showModal("Upload Failed", `This document has already been registered with ID: <b>${documentHash}</b>.`);
+                } else {
+                    saveToLedger(documentHash, file.name);
+                    showModal("Success!", `Document uploaded successfully. Your unique ID is: <b>${documentHash}</b>.`);
+                }
+            } catch (error) {
+                console.error("Error during document upload:", error);
+                showModal("Error", error.message);
+            } finally {
+                loadingSpinner.classList.add('hidden');
+                instituteFile.value = '';
+            }
+        });
+
+        // Document Verification Logic
+        verifyBtn.addEventListener('click', async () => {
+            if (!verifyFile.files.length) {
+                showModal("Error", "Please select a file to verify.");
+                return;
+            }
+
+            loadingSpinner.classList.remove('hidden');
+            const file = verifyFile.files[0];
+
+            try {
+                const documentHash = await hashFile(file);
+
+                if (checkLedger(documentHash)) {
+                    showModal("Verification Successful", "This document is <b>original</b> and its authenticity has been verified!");
+                } else {
+                    showModal("Verification Failed", "This document has been <b>tampered</b> with or is not registered.");
+                }
+            } catch (error) {
+                console.error("Error during document verification:", error);
+                showModal("Error", error.message);
+            } finally {
+                loadingSpinner.classList.add('hidden');
+                verifyFile.value = '';
+            }
+        });
+    </script>
+
+</body>
+</html>
